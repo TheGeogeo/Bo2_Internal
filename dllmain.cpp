@@ -1,27 +1,45 @@
 #include "Includes.h"
 
+void UI() {
+	system("cls");
+	const char* god = var.godMode ? "ON" : "OFF";
+	const char* point = var.point ? "ON" : "OFF";
+	const char* tpZom = var.tpZombie ? "ON" : "OFF";
+
+	std::cout << "NUMPAD0 / GodMode >> " << god << std::endl;
+	std::cout << "NUMPAD1 / Inf Point >> " << point << std::endl;
+	std::cout << "" << std::endl;
+	std::cout << "F1 / TP Zombies >> " << tpZom << std::endl;
+	std::cout << "" << std::endl;
+	std::cout << "END / Unload" << std::endl;
+}
+
 DWORD WINAPI MainHack(HMODULE hModule) {
 	AllocConsole();
 	FILE* f;
 	freopen_s(&f, "CONOUT$", "w", stdout);
 
 	SetConsoleTitle(L"Internal cheat BO2, TheGeogeo");
+	UI();
 
 	while (true)
 	{
 		if (GetAsyncKeyState(VK_NUMPAD0) & 1)
 		{
 			var.godMode = !var.godMode;
+			UI();
 		}
 
 		if (GetAsyncKeyState(VK_NUMPAD1) & 1)
 		{
 			var.point = !var.point;
+			UI();
 		}
 
 		if (GetAsyncKeyState(VK_F1) & 1)
 		{
 			var.tpZombie = !var.tpZombie;
+			UI();
 		}
 
 		if (GetAsyncKeyState(VK_END) & 1)
