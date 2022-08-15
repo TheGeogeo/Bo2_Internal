@@ -11,6 +11,7 @@ struct Variables
 	uintptr_t* baseZombEntList = (uintptr_t*)(SDK::t6zm + SDK::zombieEntList);
 
 	bool godMode = false;
+	bool point = false;
 	bool tpZombie = false;
 }var;
 

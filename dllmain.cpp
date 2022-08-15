@@ -14,6 +14,11 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 			var.godMode = !var.godMode;
 		}
 
+		if (GetAsyncKeyState(VK_NUMPAD1) & 1)
+		{
+			var.point = !var.point;
+		}
+
 		if (GetAsyncKeyState(VK_F1) & 1)
 		{
 			var.tpZombie = !var.tpZombie;
@@ -28,6 +33,12 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 		{
 			int* health = (int*)(*var.gCli + SDK::gClientHealth);
 			*health = 1000;
+		}
+
+		if (var.point)
+		{
+			int* point = (int*)(*var.gCliStat + SDK::gClientStatPoint);
+			*point = 100000;
 		}
 
 		if (var.tpZombie)
