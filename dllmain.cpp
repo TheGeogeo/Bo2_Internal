@@ -5,11 +5,13 @@ void UI() {
 	const char* god = var.godMode ? "ON" : "OFF";
 	const char* point = var.point ? "ON" : "OFF";
 	const char* tpZom = var.tpZombie ? "ON" : "OFF";
+	const char* instakill = var.instakill ? "ON" : "OFF";
 
 	std::cout << "NUMPAD0 / GodMode >> " << god << std::endl;
 	std::cout << "NUMPAD1 / Inf Point >> " << point << std::endl;
 	std::cout << "" << std::endl;
-	std::cout << "F1 / TP Zombies >> " << tpZom << std::endl;
+	std::cout << "F1 / TP Zombies >> " << tpZom << " | TP distance " << var.distanceZombieTp << " PAGE UP/PAGE DOWN" << std::endl;
+	std::cout << "F2 / InstaKill >> " << instakill << std::endl;
 	std::cout << "" << std::endl;
 	std::cout << "END / Unload" << std::endl;
 }
@@ -39,6 +41,24 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 		if (GetAsyncKeyState(VK_F1) & 1)
 		{
 			var.tpZombie = !var.tpZombie;
+			UI();
+		}
+
+		if (GetAsyncKeyState(VK_F2) & 1)
+		{
+			var.instakill = !var.instakill;
+			UI();
+		}
+
+		if (GetAsyncKeyState(VK_PRIOR) & 1)
+		{
+			var.distanceZombieTp += 5;
+			UI();
+		}
+
+		if (GetAsyncKeyState(VK_NEXT) & 1)
+		{
+			var.distanceZombieTp -= 5;
 			UI();
 		}
 
@@ -78,9 +98,22 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 
 				// get pos and set pos
 				Vec3* myPos = (Vec3*)(*var.gCliInfo + SDK::gClientInfoPosition);
-				Vec3 newEnemyPos = *myPos + Vec3{ x , y ,z } *150; // 150 is distance
+				Vec3 newEnemyPos = *myPos + Vec3{ x , y ,z } *var.distanceZombieTp;
 
 				*enemyPos = newEnemyPos;
+			}
+		}
+
+		if (var.instakill)
+		{
+			for (int i = 0; i < 90; i++)
+			{
+				int* health = (int*)(*var.baseZombEntList + SDK::zombieEntListHealth + i * SDK::zombieEntListSize);
+				int* maxHealth = (int*)(*var.baseZombEntList + SDK::zombieEntListMaxHealth + i * SDK::zombieEntListSize);
+				if (health == nullptr) continue;
+
+				*health = 1;
+				*maxHealth = 1;
 			}
 		}
 	}

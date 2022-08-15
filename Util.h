@@ -10,9 +10,12 @@ struct Variables
 
 	uintptr_t* baseZombEntList = (uintptr_t*)(SDK::t6zm + SDK::zombieEntList);
 
+	int distanceZombieTp = 150;
+
 	bool godMode = false;
 	bool point = false;
 	bool tpZombie = false;
+	bool instakill = false;
 }var;
 
 class Vector2
