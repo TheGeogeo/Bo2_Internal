@@ -1,14 +1,36 @@
 #include "Includes.h"
 
+struct Variables
+{
+	ent* gCliEnt = (ent*)(SDK::t6zm + SDK::gClient);
+	uintptr_t* gCli = (uintptr_t*)(SDK::t6zm + SDK::gClient);
+	uintptr_t* gCliStat = (uintptr_t*)(SDK::t6zm + SDK::gClient + SDK::gClientStat);
+	uintptr_t* gCliInfo = (uintptr_t*)(SDK::t6zm + SDK::gClient + SDK::gClientInfo);
+
+	uintptr_t* baseZombEntList = (uintptr_t*)(SDK::t6zm + SDK::zombieEntList);
+
+	int distanceZombieTp = 150;
+	Vec3 saveTp;
+
+	bool godMode = false;
+	bool point = false;
+	bool infAmmo = false;
+	bool tpZombie = false;
+	bool instakill = false;
+}var;
+
 void UI() {
 	system("cls");
 	const char* god = var.godMode ? "ON" : "OFF";
 	const char* point = var.point ? "ON" : "OFF";
+	const char* infAmmo = var.infAmmo ? "ON" : "OFF";
 	const char* tpZom = var.tpZombie ? "ON" : "OFF";
 	const char* instakill = var.instakill ? "ON" : "OFF";
 
 	std::cout << "NUMPAD0 / GodMode >> " << god << std::endl;
 	std::cout << "NUMPAD1 / Inf Point >> " << point << std::endl;
+	std::cout << "NUMPAD2 / Inf Ammo/Grenade >> " << infAmmo << std::endl;
+	std::cout << "NUMPAD3 / Save TP | NUMPAD4 / TP to save {x:" << var.saveTp.x << " y: " << var.saveTp.y << " z: " << var.saveTp.z << "}" << std::endl;
 	std::cout << "" << std::endl;
 	std::cout << "F1 / TP Zombies >> " << tpZom << " | TP distance " << var.distanceZombieTp << " PAGE UP/PAGE DOWN" << std::endl;
 	std::cout << "F2 / InstaKill >> " << instakill << std::endl;
@@ -38,6 +60,23 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 			UI();
 		}
 
+		if (GetAsyncKeyState(VK_NUMPAD2) & 1)
+		{
+			var.infAmmo = !var.infAmmo;
+			UI();
+		}
+
+		if (GetAsyncKeyState(VK_NUMPAD3) & 1)
+		{
+			var.saveTp = var.gCliEnt->entPlayerInfoPtr->coords;
+			UI();
+		}
+
+		if (GetAsyncKeyState(VK_NUMPAD4) & 1)
+		{
+			var.gCliEnt->entPlayerInfoPtr->coords = var.saveTp;
+		}
+
 		if (GetAsyncKeyState(VK_F1) & 1)
 		{
 			var.tpZombie = !var.tpZombie;
@@ -52,13 +91,16 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 
 		if (GetAsyncKeyState(VK_PRIOR) & 1)
 		{
-			var.distanceZombieTp += 5;
+			if (var.distanceZombieTp < (MAXINT - 5))
+				var.distanceZombieTp += 5;
+
 			UI();
 		}
 
 		if (GetAsyncKeyState(VK_NEXT) & 1)
 		{
-			var.distanceZombieTp -= 5;
+			if ((var.distanceZombieTp - 5) > 0)
+				var.distanceZombieTp -= 5;
 			UI();
 		}
 
@@ -69,14 +111,28 @@ DWORD WINAPI MainHack(HMODULE hModule) {
 
 		if (var.godMode)
 		{
-			int* health = (int*)(*var.gCli + SDK::gClientHealth);
-			*health = 1000;
+			/*int* health = (int*)(*var.gCli + SDK::gClientHealth);
+			*health = 1000;*/
+			var.gCliEnt->entPlayerPtr->health = 1000;
 		}
 
 		if (var.point)
 		{
-			int* point = (int*)(*var.gCliStat + SDK::gClientStatPoint);
-			*point = 100000;
+			/*int* point = (int*)(*var.gCliStat + SDK::gClientStatPoint);
+			*point = 100000;*/
+			var.gCliEnt->entPlayerStatPtr->point = 100000;
+		}
+
+		if (var.infAmmo)
+		{
+			var.gCliEnt->entPlayerInfoPtr->w1 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w2 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w3 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w4 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w5 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w6 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w7 = 100;
+			var.gCliEnt->entPlayerInfoPtr->w8 = 100;
 		}
 
 		if (var.tpZombie)

@@ -1,23 +1,5 @@
 #pragma once
 
-#include "SDK.h"
-
-struct Variables
-{
-	uintptr_t* gCli = (uintptr_t*)(SDK::t6zm + SDK::gClient);
-	uintptr_t* gCliStat = (uintptr_t*)(SDK::t6zm + SDK::gClient + SDK::gClientStat);
-	uintptr_t* gCliInfo = (uintptr_t*)(SDK::t6zm + SDK::gClient + SDK::gClientInfo);
-
-	uintptr_t* baseZombEntList = (uintptr_t*)(SDK::t6zm + SDK::zombieEntList);
-
-	int distanceZombieTp = 150;
-
-	bool godMode = false;
-	bool point = false;
-	bool tpZombie = false;
-	bool instakill = false;
-}var;
-
 class Vector2
 {
 public:
