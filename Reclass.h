@@ -35,14 +35,7 @@ public:
 		DEFINE_MEMBER_N(Vector3, coords, 0x28);
 		DEFINE_MEMBER_N(Vector3, velocity, 0x34);
 		DEFINE_MEMBER_N(Vector2, cameraReadOnly, 0x1F8);
-		DEFINE_MEMBER_N(int, w1, 0x428);
-		DEFINE_MEMBER_N(int, w2, 0x42C);
-		DEFINE_MEMBER_N(int, w3, 0x430);
-		DEFINE_MEMBER_N(int, w4, 0x434);
-		DEFINE_MEMBER_N(int, w5, 0x438);
-		DEFINE_MEMBER_N(int, w6, 0x43C);
-		DEFINE_MEMBER_N(int, w7, 0x440);
-		DEFINE_MEMBER_N(int, w8, 0x444);
+		DEFINE_MEMBER_N(int, weaponList[8], 0x428);
 	};
 };
 
